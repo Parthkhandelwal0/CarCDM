@@ -71,7 +71,7 @@ contract CustomerDealer {
         CustomerCount += 1;
     }
     // function to send the details of the car wanted by the customer to the manufacturer
-     function getCarDetails( address _CustomerAddress)
+     function sendCarDetails( address _CustomerAddress)
       public
       view
       returns (
@@ -89,12 +89,7 @@ contract CustomerDealer {
          _DEmailId = Dealer.DEmailId;
          return(_Cid,_Company,_Car,_DEmailId,_DPhoneNumber);
        }
-       
-    // function getPrice(address _customerAddress) external returns(uint){
-    //     DealerManufacturer dealermanufacturer = DealerManufacturer(addressDealerManufacturer);
-    //     customerRecords[_customerAddress].BillAmount = dealermanufacturer.sendPrice();
-    // }
-       
+ 
     function Getpayment(address _customerAddress) public payable returns(string memory message){
 if(msg.value==customerRecords[_customerAddress].BillAmount-customerRecords[_customerAddress].advance || msg.value==customerRecords[_customerAddress].advance){
             return "payment done";
@@ -102,8 +97,6 @@ if(msg.value==customerRecords[_customerAddress].BillAmount-customerRecords[_cust
         else{
             revert("Payment Failed, incorrect amount");
         }
-        // require(msg.value==customerRecords[_customerAddress].BillAmount,"Payment Failed, incorrect amount");
-        
     }
      function balanceOf() external view returns(uint){
         return address(this).balance;
@@ -119,7 +112,6 @@ contract DealerManufacturer{
       function setAddress(address _addressCustomerDealer) external {
         addressCustomerDealer = _addressCustomerDealer;
     }
-    
     struct ManufacturerRecords{
         uint Mid;
         address ManufacturerAddress;
@@ -139,8 +131,6 @@ contract DealerManufacturer{
         )public{
         Manufacturer = ManufacturerRecords(_Mid,_ManufacturerAddress,_name,_MPhoneNumber,_MEmailId,_GSTnumber);
     }
- 
-    
      function getCarDetails(address _customerAddress) external view returns (
         uint256 _Cid,
         string memory _Company,
@@ -149,9 +139,6 @@ contract DealerManufacturer{
         uint _DPhoneNumber)
          {
              CustomerDealer customerdealer = CustomerDealer(addressCustomerDealer);
-             return customerdealer.getCarDetails(_customerAddress);
+             return customerdealer.sendCarDetails(_customerAddress);
         }
-        // function sendPrice(uint _Cid) pure external returns(uint price){
-        //     return _price;
-        // }
 }
